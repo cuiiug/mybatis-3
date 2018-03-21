@@ -94,6 +94,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 /**
  * @author Clinton Begin
  */
+//保存mybatis-config.xml和mapper.xml的配置信息，一般加载一次，只有一个实例
 public class Configuration {
 
   protected Environment environment;
@@ -145,8 +146,13 @@ public class Configuration {
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 
+
+  //从mapper.xml 文件中读取的配置信息
+  //mappedStatements 保存所有Mapper配置文件中的select/update/insert/delete节点信息，属性是一个map
+  //key为sql对应的ID，MappedStatement为java对象，保存了select/update/insert/delete节点信息
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection");
   protected final Map<String, Cache> caches = new StrictMap<Cache>("Caches collection");
+  //保存了所有mapper文件中resultMap节点
   protected final Map<String, ResultMap> resultMaps = new StrictMap<ResultMap>("Result Maps collection");
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<ParameterMap>("Parameter Maps collection");
   protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<KeyGenerator>("Key Generators collection");

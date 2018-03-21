@@ -50,7 +50,8 @@ import org.apache.ibatis.type.TypeHandler;
 /**
  * @author Clinton Begin
  */
-public class XMLMapperBuilder extends BaseBuilder {
+//解析mapper.xml 文件，保存到Configuration
+ public class XMLMapperBuilder extends BaseBuilder {
 
   private final XPathParser parser;
   private final MapperBuilderAssistant builderAssistant;

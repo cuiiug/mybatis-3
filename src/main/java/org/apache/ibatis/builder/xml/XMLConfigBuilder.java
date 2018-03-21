@@ -51,6 +51,7 @@ import org.apache.ibatis.type.TypeHandler;
  * @author Clinton Begin
  * @author Kazuki Shimizu
  */
+//解析mybatis-config.xml 的配置文件到Configuration
 public class XMLConfigBuilder extends BaseBuilder {
 
   private boolean parsed;
@@ -100,13 +101,17 @@ public class XMLConfigBuilder extends BaseBuilder {
     return configuration;
   }
 
+  //从配置文件加载到Configuration对象中
   private void parseConfiguration(XNode root) {
     try {
+      //加载properties，一般是定义一些变量
       //issue #117 read properties first
       propertiesElement(root.evalNode("properties"));
       Properties settings = settingsAsProperties(root.evalNode("settings"));
       loadCustomVfs(settings);
+      //加载别名
       typeAliasesElement(root.evalNode("typeAliases"));
+      //拦截器
       pluginElement(root.evalNode("plugins"));
       objectFactoryElement(root.evalNode("objectFactory"));
       objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));
@@ -116,6 +121,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       environmentsElement(root.evalNode("environments"));
       databaseIdProviderElement(root.evalNode("databaseIdProvider"));
       typeHandlerElement(root.evalNode("typeHandlers"));
+      //加载mapper的配置文件，最主要的有两个：一个是sql定义，一个是resultMap
       mapperElement(root.evalNode("mappers"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);

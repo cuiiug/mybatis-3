@@ -22,6 +22,7 @@ import java.sql.Connection;
  * 
  * @author Clinton Begin
  */
+
 public interface SqlSessionFactory {
 
   SqlSession openSession();
