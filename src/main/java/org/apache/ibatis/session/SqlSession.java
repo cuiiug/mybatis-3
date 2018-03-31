@@ -29,6 +29,7 @@ import org.apache.ibatis.executor.BatchResult;
  *
  * @author Clinton Begin
  */
+//1、可以发送sql去执行并返回结果，2、获取Mapper的接口
 public interface SqlSession extends Closeable {
 
   /**

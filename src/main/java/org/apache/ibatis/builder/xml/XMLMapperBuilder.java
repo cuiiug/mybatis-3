@@ -90,6 +90,7 @@ import org.apache.ibatis.type.TypeHandler;
 
   public void parse() {
     if (!configuration.isResourceLoaded(resource)) {
+      //真正解析
       configurationElement(parser.evalNode("/mapper"));
       configuration.addLoadedResource(resource);
       bindMapperForNamespace();
@@ -107,14 +108,19 @@ import org.apache.ibatis.type.TypeHandler;
   private void configurationElement(XNode context) {
     try {
       String namespace = context.getStringAttribute("namespace");
+      //在mybatis3中，mapper必须定义namespace
       if (namespace == null || namespace.equals("")) {
         throw new BuilderException("Mapper's namespace cannot be empty");
       }
       builderAssistant.setCurrentNamespace(namespace);
+      //缓存
       cacheRefElement(context.evalNode("cache-ref"));
       cacheElement(context.evalNode("cache"));
+      //解析parameterMap，官方不推荐使用
       parameterMapElement(context.evalNodes("/mapper/parameterMap"));
+      //解析resultMap
       resultMapElements(context.evalNodes("/mapper/resultMap"));
+      //解析sql
       sqlElement(context.evalNodes("/mapper/sql"));
       buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
     } catch (Exception e) {
@@ -255,20 +261,27 @@ import org.apache.ibatis.type.TypeHandler;
 
   private ResultMap resultMapElement(XNode resultMapNode, List<ResultMapping> additionalResultMappings) throws Exception {
     ErrorContext.instance().activity("processing " + resultMapNode.getValueBasedIdentifier());
+    // id ,对应ResultMap.id
     String id = resultMapNode.getStringAttribute("id",
         resultMapNode.getValueBasedIdentifier());
+    //type，对应ResultMap.type
     String type = resultMapNode.getStringAttribute("type",
         resultMapNode.getStringAttribute("ofType",
             resultMapNode.getStringAttribute("resultType",
                 resultMapNode.getStringAttribute("javaType"))));
     String extend = resultMapNode.getStringAttribute("extends");
+    // 是否自动映射
     Boolean autoMapping = resultMapNode.getBooleanAttribute("autoMapping");
+    // 将type映射成class，可以是别名，也可以是全限定名
     Class<?> typeClass = resolveClass(type);
     Discriminator discriminator = null;
+    //对应ResultMap.resultMapping
     List<ResultMapping> resultMappings = new ArrayList<ResultMapping>();
     resultMappings.addAll(additionalResultMappings);
     List<XNode> resultChildren = resultMapNode.getChildren();
+    //解析子节点
     for (XNode resultChild : resultChildren) {
+      // 解析 constructor
       if ("constructor".equals(resultChild.getName())) {
         processConstructorElement(resultChild, typeClass, resultMappings);
       } else if ("discriminator".equals(resultChild.getName())) {
@@ -283,6 +296,7 @@ import org.apache.ibatis.type.TypeHandler;
     }
     ResultMapResolver resultMapResolver = new ResultMapResolver(builderAssistant, id, typeClass, extend, discriminator, resultMappings, autoMapping);
     try {
+      // 得到resultMapings后，生产 ResultMap并加入到Configuration中
       return resultMapResolver.resolve();
     } catch (IncompleteElementException  e) {
       configuration.addIncompleteResultMap(resultMapResolver);

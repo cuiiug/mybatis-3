@@ -30,6 +30,7 @@ import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
  *
  * @author Clinton Begin
  */
+//构造器：根据配置信息或者代码来生成SqlSessionFactory
 public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(Reader reader) {
@@ -77,6 +78,7 @@ public class SqlSessionFactoryBuilder {
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
       return build(parser.parse());
     } catch (Exception e) {
+      e.printStackTrace();
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);
     } finally {
       ErrorContext.instance().reset();

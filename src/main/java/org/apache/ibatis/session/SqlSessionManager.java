@@ -32,7 +32,8 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 /**
  * @author Larry Meadors
  */
-public class SqlSessionManager implements SqlSessionFactory, SqlSession {
+//目前没有使用
+ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
 
   private final SqlSessionFactory sqlSessionFactory;
   private final SqlSession sqlSessionProxy;
