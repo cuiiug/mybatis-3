@@ -30,6 +30,8 @@ import org.apache.ibatis.executor.BatchResult;
  * @author Clinton Begin
  */
 //1、可以发送sql去执行并返回结果，2、获取Mapper的接口
+//每个线程都有自己的SqlSession实例
+//对象线程不安全，不能线程共享
 public interface SqlSession extends Closeable {
 
   /**

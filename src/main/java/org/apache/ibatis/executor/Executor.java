@@ -34,6 +34,7 @@ public interface Executor {
 
   ResultHandler NO_RESULT_HANDLER = null;
 
+  //执行update/insert/delete 方法
   int update(MappedStatement ms, Object parameter) throws SQLException;
 
   <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey cacheKey, BoundSql boundSql) throws SQLException;
@@ -44,10 +45,13 @@ public interface Executor {
 
   List<BatchResult> flushStatements() throws SQLException;
 
+  //事务提交
   void commit(boolean required) throws SQLException;
 
+  //事务回滚
   void rollback(boolean required) throws SQLException;
 
+  //生产缓存的key
   CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql);
 
   boolean isCached(MappedStatement ms, CacheKey key);

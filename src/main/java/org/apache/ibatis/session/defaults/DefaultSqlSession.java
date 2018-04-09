@@ -49,6 +49,7 @@ import org.apache.ibatis.session.SqlSession;
 public class DefaultSqlSession implements SqlSession {
 
   private final Configuration configuration;
+  //持用一个executor对象
   private final Executor executor;
 
   private final boolean autoCommit;
@@ -138,13 +139,16 @@ public class DefaultSqlSession implements SqlSession {
 
   @Override
   public <E> List<E> selectList(String statement, Object parameter) {
+	//RowBounds 查询范围，分页是用到
     return this.selectList(statement, parameter, RowBounds.DEFAULT);
   }
 
   @Override
   public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
     try {
+      //从Configuration中读取一个MappedStatement配置
       MappedStatement ms = configuration.getMappedStatement(statement);
+      //executor 执行查询操作
       return executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);
@@ -235,6 +239,7 @@ public class DefaultSqlSession implements SqlSession {
     rollback(false);
   }
 
+  //事务回滚
   @Override
   public void rollback(boolean force) {
     try {
