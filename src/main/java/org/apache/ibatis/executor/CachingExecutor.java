@@ -36,6 +36,7 @@ import org.apache.ibatis.transaction.Transaction;
  * @author Clinton Begin
  * @author Eduardo Macarron
  */
+//Executor 的装饰器，给Executor增加了缓存功能
 public class CachingExecutor implements Executor {
 
   private final Executor delegate;

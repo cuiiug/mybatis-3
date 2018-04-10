@@ -33,10 +33,13 @@ import org.apache.ibatis.session.Configuration;
  *
  * @author Clinton Begin
  */
-public class BoundSql {
 
+public class BoundSql {
+  //已经处理过的sql，可以被数据库执行
   private final String sql;
+  //sql中的参数映射，不包含实际值
   private final List<ParameterMapping> parameterMappings;
+  //执行方法传入的参数
   private final Object parameterObject;
   private final Map<String, Object> additionalParameters;
   private final MetaObject metaParameters;
